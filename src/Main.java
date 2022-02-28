@@ -1,22 +1,32 @@
-import java.io.BufferedReader;
-
 public class Main {
     public static void main(String[] args) {
-
-        input();
+        System.err.println("#1.in");
+        try {
+            f(); // создаем фрейм, помещаем в стек, передаем в него управление
+        } catch (Error e) { // "перехватили" "летящее" исключение
+            System.err.println("#1.CATCH");  // и работаем
+        }
+        System.err.println("#1.out");  // работаем дальше
     }
 
+    public static void f() {
+        System.err.println(".   #2.in");
+        g(); // создаем фрейм, помещаем в стек, передаем в него управление
+        System.err.println(".   #2.out"); // ПРОПУСТИЛИ!
+    }
 
-    public static String input() throws MyException {
-        String s = null;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            s = reader.readLine();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+    public static void g() {
+        System.err.println(".   .   #3.in");
+        h(); // создаем фрейм, помещаем в стек, передаем в него управление
+        System.err.println(".   .   #3.out"); // ПРОПУСТИЛИ!
+    }
+
+    public static void h() {
+        System.err.println(".   .   .   #4.in");
+        if (true) {
+            System.err.println(".   .   .   #4.THROW");
+            throw new Error(); // выходим со всей пачки фреймов ("раскрутка стека") по 'throw'
         }
-        if (s.equals("")) {
-            throw new MyException("String can not be empty!");
-        }
-        return s;
+        System.err.println(".   .   .   #4.out"); // ПРОПУСТИЛИ!
     }
 }
